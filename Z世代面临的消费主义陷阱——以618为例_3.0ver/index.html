@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消费大师 - 消费习惯诊断游戏</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#F59E0B',
+            success: '#10B981',
+            warning: '#FBBF24',
+            danger: '#EF4444',
+            dark: '#1E293B',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      }
+      .btn-hover {
+        transition: all 0.2s ease;
+      }
+      .btn-hover:hover {
+        transform: scale(1.05);
+      }
+      .progress-bar {
+        transition: width 1s ease-in-out;
+      }
+      .result-fade {
+        animation: fadeIn 0.8s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen font-inter">
+  <!-- 导航栏 -->
+  <nav class="bg-white/95 backdrop-blur-lg shadow-md fixed top-0 w-full z-50 transition-all duration-300 h-[72px]" id="navbar">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center h-full">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-shopping-bag text-primary text-2xl"></i>
+        <span class="text-xl font-bold text-dark">消费大师</span>
+      </div>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors text-lg font-medium px-3 py-2 rounded-lg hover:bg-primary/10 hover:shadow-sm">首页</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors text-lg font-medium px-3 py-2 rounded-lg hover:bg-primary/10 hover:shadow-sm">游戏</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors text-lg font-medium px-3 py-2 rounded-lg hover:bg-primary/10 hover:shadow-sm">分析报告</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors text-lg font-medium px-3 py-2 rounded-lg hover:bg-primary/10 hover:shadow-sm">排行榜</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="hidden md:block bg-primary text-white px-4 py-2 rounded-lg shadow-md hover:bg-primary/90 transition-colors btn-hover">
+          开始游戏
+        </button>
+        <button class="md:hidden text-dark text-xl" id="mobile-menu-button">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobile-menu">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors py-2">首页</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors py-2">游戏</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors py-2">分析报告</a>
+        <a href="#" class="text-dark/80 hover:text-primary transition-colors py-2">排行榜</a>
+        <button class="bg-primary text-white px-4 py-2 rounded-lg shadow-md hover:bg-primary/90 transition-colors btn-hover">
+          开始游戏
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 英雄区域 -->
+  <section class="pt-24 pb-12 md:pt-32 md:pb-20 px-4">
+    <div class="container mx-auto">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark mb-6 leading-tight text-shadow whitespace-nowrap">探索你的<span class="text-primary">消费习惯</span>，成为精明购物达人</h1>
+        <div class="grid grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto">
+          <div class="bg-primary/10 p-4 rounded-xl hover:bg-primary/20 transition-colors group">
+            <div class="flex items-center space-x-3">
+              <i class="fa fa-gamepad text-primary text-2xl"></i>
+              <p class="text-dark/80 text-lg">游戏化消费诊断体验</p>
+            </div>
+          </div>
+          <div class="bg-success/10 p-4 rounded-xl hover:bg-success/20 transition-colors group">
+            <div class="flex items-center space-x-3">
+              <i class="fa fa-bar-chart text-success text-2xl"></i>
+              <p class="text-dark/80 text-lg">消费倾向深度分析</p>
+            </div>
+          </div>
+          <div class="bg-warning/10 p-4 rounded-xl hover:bg-warning/20 transition-colors group">
+            <div class="flex items-center space-x-3">
+              <i class="fa fa-money text-warning text-2xl"></i>
+              <p class="text-dark/80 text-lg">潜在节省机会发现</p>
+            </div>
+          </div>
+          <div class="bg-danger/10 p-4 rounded-xl hover:bg-danger/20 transition-colors group">
+            <div class="flex items-center space-x-3">
+              <i class="fa fa-shopping-cart text-danger text-2xl"></i>
+              <p class="text-dark/80 text-lg">购物决策优化指南</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button id="start-game-btn" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl shadow-lg btn-hover text-lg font-medium">
+            <i class="fa fa-gamepad mr-2"></i>开始游戏
+          </button>
+          <button class="bg-white hover:bg-gray-50 text-primary border border-primary/30 px-8 py-3 rounded-xl shadow-md btn-hover text-lg font-medium">
+            <i class="fa fa-line-chart mr-2"></i>查看分析
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 游戏区域 -->
+  <section id="game-section" class="hidden py-12 px-4 mt-[72px]">
+    <div class="container mx-auto">
+      <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- 游戏标题和进度 -->
+        <div class="bg-primary text-white p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">消费大师挑战赛</h2>
+            <div class="flex items-center">
+              <span class="mr-2">进度:</span>
+              <div class="w-24 h-2 bg-white/30 rounded-full overflow-hidden">
+                <div id="game-progress" class="progress-bar h-full bg-white rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-white/80 text-sm">当前关卡</p>
+              <p class="text-xl font-bold" id="current-level">日常购物</p>
+            </div>
+            <div class="text-right">
+              <p class="text-white/80 text-sm">剩余时间</p>
+              <p class="text-xl font-bold" id="time-remaining">120秒</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 游戏说明 -->
+        <div class="p-6 border-b">
+          <h3 class="text-lg font-semibold text-dark mb-2">游戏规则</h3>
+          <p class="text-dark/70" id="level-instructions">
+            你有120秒时间在预算内选择最具性价比的商品凑单，尽量接近但不超过目标金额。
+            每关目标金额和商品不同，完成后将获得消费习惯分析。
+          </p>
+        </div>
+
+        <!-- 游戏内容 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+          <!-- 预算信息 -->
+          <div class="md:col-span-1 bg-gray-50 rounded-xl p-4">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-dark">预算信息</h3>
+              <span id="budget-status" class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                合理
+              </span>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <span class="text-dark/70">目标金额:</span>
+                <span class="font-semibold text-dark" id="target-amount">¥199</span>
+              </div>
+              
+              <div class="flex justify-between items-center">
+                <span class="text-dark/70">已选金额:</span>
+                <span class="font-semibold text-dark" id="selected-amount">¥0</span>
+              </div>
+              
+              <div class="flex justify-between items-center">
+                <span class="text-dark/70">剩余预算:</span>
+                <span class="font-semibold text-dark" id="remaining-budget">¥199</span>
+              </div>
+              
+              <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="budget-progress" class="progress-bar h-full bg-primary rounded-full" style="width: 0%"></div>
+              </div>
+              
+              <div class="flex justify-between items-center">
+                <span class="text-dark/70">性价比评分:</span>
+                <div class="flex items-center">
+                  <span class="font-semibold text-dark mr-1" id="value-score">0</span>
+                  <i class="fa fa-star text-yellow-400"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <button id="submit-selection" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg shadow-md btn-hover font-medium">
+                提交选择
+              </button>
+            </div>
+          </div>
+          
+          <!-- 商品列表 -->
+          <div class="md:col-span-2">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-dark">可选商品</h3>
+              <div class="flex space-x-2">
+                <button class="filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-primary/10 text-primary" data-category="all">
+                  全部
+                </button>
+                <button class="filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-dark/70" data-category="food">
+                  食品
+                </button>
+                <button class="filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-dark/70" data-category="household">
+                  家居
+                </button>
+                <button class="filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-dark/70" data-category="electronics">
+                  电子
+                </button>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="products-container">
+              <!-- 商品卡片将通过JavaScript动态生成 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结果分析区域 -->
+  <section id="result-section" class="hidden py-12 px-4 mt-[72px]">
+    <div class="container mx-auto">
+      <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- 结果标题 -->
+        <div class="bg-success text-white p-6 text-center">
+          <h2 class="text-2xl font-bold">消费习惯分析报告</h2>
+          <p class="text-white/80 mt-2">基于您的购物选择生成的个性化分析</p>
+        </div>
+        
+        <!-- 结果摘要 -->
+        <div class="p-6 border-b">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+              <p class="text-dark/70 text-sm">总得分</p>
+              <p class="text-4xl font-bold text-success" id="final-score">0</p>
+            </div>
+            
+            <div class="text-center md:text-left mb-4 md:mb-0">
+              <p class="text-dark/70 text-sm">预算完成度</p>
+              <div class="flex items-center">
+                <p class="text-2xl font-bold text-primary mr-2" id="budget-completion">92%</p>
+                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" id="budget-completion-bar" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center md:text-left">
+              <p class="text-dark/70 text-sm">消费风格</p>
+              <div class="space-y-2">
+                <p class="text-xl font-bold text-dark" id="spending-style">精打细算型</p>
+                <p class="text-sm text-dark/70" id="style-description">兼顾预算与商品多样性</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 详细分析 -->
+        <div class="p-6">
+          <!-- 消费偏好图表 -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-dark mb-4">消费偏好分析</h3>
+            <div class="grid grid-cols-1">
+              <div class="bg-gray-50 rounded-xl p-4">
+                <h4 class="font-medium text-dark mb-3">品类偏好</h4>
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-dark/70 text-sm">食品</span>
+                      <span id="category-food-percent" class="font-medium text-dark text-lg">0%</span>
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div id="category-food-progress" class="h-full bg-blue-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-dark/70 text-sm">家居</span>
+                      <span id="category-household-percent" class="font-medium text-dark text-lg">0%</span>
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div id="category-household-progress" class="h-full bg-green-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-dark/70 text-sm">电子</span>
+                      <span id="category-electronics-percent" class="font-medium text-dark text-lg">0%</span>
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div id="category-electronics-progress" class="h-full bg-purple-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 评分详情 -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-dark mb-4">评分详情</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-blue-50 p-4 rounded-xl">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-dark/70">预算控制</span>
+                  <span id="budget-score" class="font-bold text-primary">0分</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div id="budget-score-bar" class="h-full bg-primary rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-dark/60 mt-2" id="budget-feedback">与目标金额的接近程度</p>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-xl">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-dark/70">性价比选择</span>
+                  <span id="value-score-result" class="font-bold text-green-600">0分</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div id="value-score-bar" class="h-full bg-green-600 rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-dark/60 mt-2" id="value-feedback">所选商品的平均性价比</p>
+              </div>
+              
+              <div class="bg-purple-50 p-4 rounded-xl">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-dark/70">品类多样性</span>
+                  <span id="diversity-score" class="font-bold text-purple-600">0分</span>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div id="diversity-score-bar" class="h-full bg-purple-600 rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-dark/60 mt-2" id="diversity-feedback">选择商品的品类丰富度</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 消费建议 -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-dark mb-4">个性化消费建议</h3>
+            <div class="grid grid-cols-2 gap-4 md:gap-6">
+              <div class="bg-primary/5 p-6 rounded-2xl border-2 border-primary/20 hover:border-primary/30 transition-colors group">
+                <div class="flex flex-col items-center text-center">
+                  <div class="mb-4 p-4 bg-white rounded-full shadow-lg">
+                    <i class="fa fa-pie-chart text-3xl text-primary"></i>
+                  </div>
+                  <h4 class="text-xl font-bold text-dark mb-2">智能比价</h4>
+                  <p class="text-dark/70 text-lg leading-tight">全网比价 · 优惠追踪</p>
+                </div>
+              </div>
+
+              <div class="bg-green-100/5 p-6 rounded-2xl border-2 border-green-200/20 hover:border-green-300/30 transition-colors group">
+                <div class="flex flex-col items-center text-center">
+                  <div class="mb-4 p-4 bg-white rounded-full shadow-lg">
+                    <i class="fa fa-balance-scale text-3xl text-green-600"></i>
+                  </div>
+                  <h4 class="text-xl font-bold text-dark mb-2">理性消费</h4>
+                  <p class="text-dark/70 text-lg leading-tight">需求优先 · 拒绝冲动</p>
+                </div>
+              </div>
+
+              <div class="bg-purple-100/5 p-6 rounded-2xl border-2 border-purple-200/20 hover:border-purple-300/30 transition-colors group">
+                <div class="flex flex-col items-center text-center">
+                  <div class="mb-4 p-4 bg-white rounded-full shadow-lg">
+                    <i class="fa fa-clock-o text-3xl text-purple-600"></i>
+                  </div>
+                  <h4 class="text-xl font-bold text-dark mb-2">时机掌握</h4>
+                  <p class="text-dark/70 text-lg leading-tight">优惠周期 · 精准把握</p>
+                </div>
+              </div>
+
+              <div class="bg-yellow-100/5 p-6 rounded-2xl border-2 border-yellow-200/20 hover:border-yellow-300/30 transition-colors group">
+                <div class="flex flex-col items-center text-center">
+                  <div class="mb-4 p-4 bg-white rounded-full shadow-lg">
+                    <i class="fa fa-line-chart text-3xl text-yellow-600"></i>
+                  </div>
+                  <h4 class="text-xl font-bold text-dark mb-2">消费进化</h4>
+                  <p class="text-dark/70 text-lg leading-tight">习惯分析 · 持续优化</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 下一步行动 -->
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button id="play-again-btn" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl shadow-md btn-hover text-lg font-medium">
+              <i class="fa fa-refresh mr-2"></i>再玩一次
+            </button>
+            <button class="bg-white hover:bg-gray-50 text-primary border border-primary/30 px-8 py-3 rounded-xl shadow-md btn-hover text-lg font-medium">
+              <i class="fa fa-share-alt mr-2"></i>分享结果
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white py-12 px-4 mt-[72px]">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <i class="fa fa-shopping-bag text-primary text-2xl"></i>
+            <span class="text-xl font-bold">消费大师</span>
+          </div>
+          <p class="text-gray-400 mb-4">通过游戏化体验，帮助您了解自己的消费习惯，成为更精明的消费者。</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+              <i class="fa fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+              <i class="fa fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">首页</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">游戏</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">分析报告</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">排行榜</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">帮助中心</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">常见问题</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">游戏规则</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">联系我们</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-primary transition-colors">隐私政策</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">订阅更新</h4>
+          <p class="text-gray-400 mb-4">获取最新的消费技巧和游戏更新</p>
+          <div class="flex">
+            <input type="email" placeholder="您的邮箱地址" class="px-4 py-2 rounded-l-lg w-full focus:outline-none focus:ring-2 focus:ring-primary">
+            <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-lg btn-hover">
+              <i class="fa fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+        <p>&copy; 2023 消费大师. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('py-2', 'shadow-md');
+        navbar.classList.remove('py-3', 'shadow-sm');
+      } else {
+        navbar.classList.add('py-3', 'shadow-sm');
+        navbar.classList.remove('py-2', 'shadow-md');
+      }
+    });
+    
+    // 移动端菜单
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      mobileMenuButton.innerHTML = mobileMenu.classList.contains('hidden') 
+        ? '<i class="fa fa-bars"></i>' 
+        : '<i class="fa fa-times"></i>';
+    });
+    
+    // 游戏数据
+    const gameData = {
+      currentLevel: 1,
+      timeLimit: 120, // 秒
+      targetAmount: 199,
+      selectedProducts: [],
+      products: [
+        { id: 1, name: '一斤有机苹果', price: 15.9, category: 'food', valueScore: 8, image: '苹果.jpg' },
+        { id: 2, name: '全麦面包', price: 8.5, category: 'food', valueScore: 6, strategyScore: 3, image: '全麦面包.jpg' },
+        { id: 3, name: '一提高钙牛奶', price:59.9, category: 'food', valueScore: 9, image: '高钙牛奶.jpg' },
+        { id: 4, name: '洗发水', price: 32.9, category: 'household', valueScore: 6, image: '洗发水.jpg' },
+        { id: 5, name: '卫生纸', price: 9.9, category: 'household', valueScore: 5, strategyScore: 8, image: '卫生纸.jpg' },
+        { id: 6, name: '洗碗精', price: 12.9, category: 'household', valueScore: 7, image: '洗碗精.jpg' },
+        { id: 7, name: '充电宝', price: 79.9, category: 'electronics', valueScore: 9, image: '充电宝.jpg' },
+        { id: 8, name: 'USB数据线', price: 18.5, category: 'electronics', valueScore: 7, image: '数据线.jpg' },
+        { id: 9, name: '蓝牙耳机', price: 129.9, category: 'electronics', valueScore: 8, image: '蓝牙耳机.jpg' },
+        { id: 10, name: '办公鼠标', price: 45.8, category: 'electronics', valueScore: 9, image: '办公鼠标.jpg' },
+        { id: 11, name: '洗衣液', price: 16.9, category: 'household', valueScore: 7, image: '洗衣液.jpg' },
+        { id: 12, name: '保温杯', price: 59.9, category: 'household', valueScore: 8, image: '保温杯.jpg' },
+      ]
+    };
+    
+    // DOM元素
+    const startGameBtn = document.getElementById('start-game-btn');
+    const gameSection = document.getElementById('game-section');
+    const resultSection = document.getElementById('result-section');
+    const productsContainer = document.getElementById('products-container');
+    const selectedAmountEl = document.getElementById('selected-amount');
+    const remainingBudgetEl = document.getElementById('remaining-budget');
+    const budgetProgressEl = document.getElementById('budget-progress');
+    const valueScoreEl = document.getElementById('value-score');
+    const budgetStatusEl = document.getElementById('budget-status');
+    const timeRemainingEl = document.getElementById('time-remaining');
+    const submitSelectionBtn = document.getElementById('submit-selection');
+    const playAgainBtn = document.getElementById('play-again-btn');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    
+    // 计算平均性价比分数
+    function calculateAvgValueScore() {
+      if (gameData.selectedProducts.length === 0) return 0;
+      return gameData.selectedProducts.reduce((sum, p) => sum + p.valueScore, 0) / gameData.selectedProducts.length;
+    }
+    
+    // 计算预算控制得分 (0-30分)
+    function calculateBudgetScore() {
+      const total = calculateTotal();
+      if (total <= 0) return 0;
+      
+      // 计算与目标金额的接近程度
+      const ratio = total / gameData.targetAmount;
+      
+      // 接近100%但不超过的得分最高
+      if (ratio >= 0.9 && ratio <= 1) {
+        return 30; // 满分
+      } else if (ratio > 1) {
+        // 超出预算，根据超出比例扣分
+        return Math.max(0, 30 - Math.min(30, Math.round((ratio - 1) * 300)));
+      } else {
+        // 低于预算，根据比例给分
+        return Math.round(ratio * 30);
+      }
+    }
+    
+    // 计算性价比选择得分 (0-30分)
+    function calculateValueScore() {
+      const avgValue = calculateAvgValueScore();
+      // 性价比最高为10分，映射到0-30分
+      return Math.round((avgValue / 10) * 30);
+    }
+    
+    // 计算品类多样性得分 (0-20分)
+    function calculateDiversityScore() {
+      if (gameData.selectedProducts.length < 2) return 0;
+      
+      // 获取选择的品类数量
+      const categories = new Set(gameData.selectedProducts.map(p => p.category));
+      const categoryCount = categories.size;
+      
+      // 最多3个品类，映射到0-20分
+      return Math.round((categoryCount / 3) * 20);
+    }
+    
+    // 计算商品数量合理性得分 (0-20分)
+    function calculateQuantityScore() {
+      const totalItems = gameData.selectedProducts.length;
+      
+      // 5-8件商品为最佳数量
+      if (totalItems >= 5 && totalItems <= 8) {
+        return 20;
+      } else if (totalItems < 3 || totalItems > 12) {
+        return 5; // 数量太少或太多
+      } else {
+        // 接近最佳数量区间的得分更高
+        const distance = Math.min(Math.abs(totalItems - 5), Math.abs(totalItems - 8));
+        return Math.max(5, 20 - distance * 3);
+      }
+    }
+    
+    // 计算总得分
+    function calculateTotalScore() {
+      const budgetScore = calculateBudgetScore();
+      const valueScore = calculateValueScore();
+      const diversityScore = calculateDiversityScore();
+      const quantityScore = calculateQuantityScore();
+      
+      // 总分 = 各项得分之和
+      return budgetScore + valueScore + diversityScore + quantityScore;
+    }
+    
+    // 计算消费风格（五分为一档，共六档）
+    function calculateStyle(score) {
+      if (score >= 95) {
+        return {
+          style: '消费大师',
+          desc: '完美平衡预算与性价比，购物决策精准无误，是所有人的榜样'
+        };
+      } else if (score >= 90) {
+        return {
+          style: '超级精打细算',
+          desc: '预算控制极佳，所选商品性价比高，消费习惯非常健康'
+        };
+      } else if (score >= 85) {
+        return {
+          style: '精明消费者',
+          desc: '购物决策理性，能在预算内选择高性价比商品，消费习惯良好'
+        };
+      } else if (score >= 80) {
+        return {
+          style: '稳健型消费者',
+          desc: '消费较为理性，但在预算控制或性价比选择上仍有优化空间'
+        };
+      } else if (score >= 75) {
+        return {
+          style: '普通消费者',
+          desc: '消费习惯一般，有提升空间，建议更注重性价比和预算控制'
+        };
+      } else {
+        return {
+          style: '待优化型',
+          desc: '消费习惯有待改善，建议制定购物计划，提高决策理性'
+        };
+      }
+    }
+    
+    // 开始游戏
+    startGameBtn.addEventListener('click', () => {
+      // 隐藏首页，显示游戏区域
+      document.querySelector('section.pt-24').classList.add('hidden');
+      gameSection.classList.remove('hidden');
+      
+      // 初始化游戏
+      initializeGame();
+      
+      // 开始倒计时
+      startCountdown();
+    });
+    
+    // 初始化游戏
+    function initializeGame() {
+      // 重置游戏数据
+      gameData.selectedProducts = [];
+      gameData.currentLevel = 1;
+      gameData.timeLimit = 120;
+      
+      // 更新UI
+      document.getElementById('current-level').textContent = `第${gameData.currentLevel}关：日常购物`;
+      document.getElementById('target-amount').textContent = `¥${gameData.targetAmount}`;
+      document.getElementById('game-progress').style.width = '0%';
+      
+      // 生成商品卡片
+      renderProducts('all');
+      
+      // 更新预算信息
+      updateBudgetInfo();
+    }
+    
+    // 渲染商品卡片
+    function renderProducts(category) {
+      productsContainer.innerHTML = '';
+      
+      const filteredProducts = category === 'all' 
+        ? gameData.products 
+        : gameData.products.filter(product => product.category === category);
+      
+      filteredProducts.forEach(product => {
+        const isSelected = gameData.selectedProducts.some(p => p.id === product.id);
+        
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-xl shadow-md overflow-hidden card-hover ${isSelected ? 'ring-2 ring-primary' : ''}`;
+        card.innerHTML = `
+          <div class="relative">
+            <img src="${product.image}" alt="${product.name}" class="w-full h-40 object-cover">
+            <div class="absolute top-2 right-2 bg-primary/90 text-white text-xs px-2 py-1 rounded-full">
+              ${product.category === 'food' ? '食品' : product.category === 'household' ? '家居' : '电子'}
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-dark mb-1">${product.name}</h3>
+            <div class="flex justify-between items-center">
+              <p class="text-lg font-bold text-primary">¥${product.price}</p>
+              <div class="flex items-center">
+                <span class="text-sm text-dark/70 mr-1">${product.valueScore}</span>
+                <i class="fa fa-star text-yellow-400"></i>
+              </div>
+            </div>
+          </div>
+          <button class="product-btn w-full py-2 bg-gray-50 hover:bg-gray-100 transition-colors ${isSelected ? 'bg-primary/10 text-primary' : ''}" data-id="${product.id}">
+            ${isSelected ? '已选择' : '选择'}
+          </button>
+        `;
+        
+        productsContainer.appendChild(card);
+      });
+      
+      // 添加商品选择事件
+      document.querySelectorAll('.product-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const productId = parseInt(btn.dataset.id);
+          toggleProductSelection(productId);
+        });
+      });
+    }
+    
+    // 切换商品选择状态
+    function toggleProductSelection(productId) {
+      const product = gameData.products.find(p => p.id === productId);
+      
+      if (!product) return;
+      
+      const isSelected = gameData.selectedProducts.some(p => p.id === productId);
+      
+      if (isSelected) {
+        // 移除已选择的商品
+        gameData.selectedProducts = gameData.selectedProducts.filter(p => p.id !== productId);
+      } else {
+        // 检查是否超出预算
+        const total = calculateTotal();
+        if (total + product.price > gameData.targetAmount) {
+          // 超出预算提示
+          alert('已超出预算！请选择其他商品。');
+          return;
+        }
+        
+        // 添加新选择的商品
+        gameData.selectedProducts.push(product);
+      }
+      
+      // 更新UI
+      renderProducts(getCurrentCategory());
+      updateBudgetInfo();
+    }
+    
+    // 获取当前筛选类别
+    function getCurrentCategory() {
+      return document.querySelector('.filter-btn.bg-primary\\/10').dataset.category;
+    }
+    
+    // 更新预算信息
+    function updateBudgetInfo() {
+      const total = calculateTotal();
+      const remaining = gameData.targetAmount - total;
+      const percentage = Math.round((total / gameData.targetAmount) * 100);
+      
+      // 更新显示
+      selectedAmountEl.textContent = `¥${total.toFixed(1)}`;
+      remainingBudgetEl.textContent = `¥${remaining.toFixed(1)}`;
+      budgetProgressEl.style.width = `${percentage}%`;
+      
+      // 更新性价比分数
+      const valueScore = Math.round(calculateAvgValueScore());
+      valueScoreEl.textContent = valueScore;
+      
+      // 更新预算状态
+      if (total > gameData.targetAmount) {
+        budgetStatusEl.textContent = '超支';
+        budgetStatusEl.className = 'px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800';
+      } else if (total === gameData.targetAmount) {
+        budgetStatusEl.textContent = '完美';
+        budgetStatusEl.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+      } else if (remaining < 10) {
+        budgetStatusEl.textContent = '接近';
+        budgetStatusEl.className = 'px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800';
+      } else {
+        budgetStatusEl.textContent = '合理';
+        budgetStatusEl.className = 'px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800';
+      }
+    }
+    
+    // 计算已选商品总价
+    function calculateTotal() {
+      return gameData.selectedProducts.reduce((sum, product) => sum + product.price, 0);
+    }
+    
+    // 开始倒计时
+    function startCountdown() {
+      let timeLeft = gameData.timeLimit;
+      
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        
+        // 更新时间显示
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timeRemainingEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        // 时间快结束时改变颜色
+        if (timeLeft <= 10) {
+          timeRemainingEl.classList.add('text-red-500');
+          timeRemainingEl.classList.remove('text-dark');
+        }
+        
+        // 时间到
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          submitSelection();
+        }
+      }, 1000);
+    }
+    
+    // 提交选择
+    submitSelectionBtn.addEventListener('click', submitSelection);
+    
+    function submitSelection() {
+      // 隐藏游戏区域，显示结果区域
+      gameSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      
+      // 生成结果
+      generateResult();
+    }
+    
+    // 生成结果
+    function generateResult() {
+      const total = calculateTotal();
+      const budgetCompletion = Math.min(Math.round((total / gameData.targetAmount) * 100), 100);
+      
+      // 计算各项得分
+      const budgetScore = calculateBudgetScore();
+      const valueScore = calculateValueScore();
+      const diversityScore = calculateDiversityScore();
+      const quantityScore = calculateQuantityScore();
+      const totalScore = calculateTotalScore();
+      
+      // 计算品类分布
+      const categoryDistribution = gameData.selectedProducts.reduce((acc, p) => {
+        acc[p.category] = (acc[p.category] || 0) + 1;
+        return acc;
+      }, {});
+      const totalItems = gameData.selectedProducts.length || 1;
+
+      // 更新品类偏好
+      ['food', 'household', 'electronics'].forEach(category => {
+        const percent = Math.round(((categoryDistribution[category] || 0) / totalItems) * 100);
+        document.querySelector(`#category-${category}-progress`).style.width = `${percent}%`;
+        document.querySelector(`#category-${category}-percent`).textContent = `${percent}%`;
+      });
+
+      // 确定消费风格
+      const styleInfo = calculateStyle(totalScore);
+      
+      // 更新评分详情
+      document.getElementById('budget-score').textContent = `${budgetScore}分`;
+      document.getElementById('budget-score-bar').style.width = `${(budgetScore / 30) * 100}%`;
+      
+      document.getElementById('value-score-result').textContent = `${valueScore}分`;
+      document.getElementById('value-score-bar').style.width = `${(valueScore / 30) * 100}%`;
+      
+      document.getElementById('diversity-score').textContent = `${diversityScore}分`;
+      document.getElementById('diversity-score-bar').style.width = `${(diversityScore / 20) * 100}%`;
+      
+      // 生成评分反馈
+      document.getElementById('budget-feedback').textContent = 
+        budgetScore > 25 ? "预算控制极佳，接近目标金额且未超支" :
+        budgetScore > 20 ? "预算控制良好，在合理范围内" :
+        budgetScore > 15 ? "预算控制一般，可进一步优化" :
+        "预算控制有待提高，与目标金额差距较大";
+      
+      document.getElementById('value-feedback').textContent = 
+        valueScore > 25 ? "所选商品性价比极高，非常明智的选择" :
+        valueScore > 20 ? "所选商品性价比良好" :
+        valueScore > 15 ? "所选商品性价比一般" :
+        "所选商品性价比不高，建议更注重性价比";
+      
+      document.getElementById('diversity-feedback').textContent = 
+        diversityScore > 15 ? "商品品类丰富多样，选择均衡" :
+        diversityScore > 10 ? "商品品类较为多样" :
+        diversityScore > 5 ? "商品品类单一，缺乏多样性" :
+        "仅选择了单一品类商品";
+      
+      // 更新结果UI
+      document.getElementById('final-score').textContent = Math.round(totalScore);
+      document.getElementById('budget-completion').textContent = `${budgetCompletion}%`;
+      document.getElementById('budget-completion-bar').style.width = `${budgetCompletion}%`;
+      document.getElementById('spending-style').textContent = styleInfo.style;
+      document.getElementById('style-description').textContent = styleInfo.desc;
+      
+      // 添加动画效果
+      document.querySelectorAll('#result-section .container > div').forEach(el => {
+        el.classList.add('result-fade');
+      });
+    }
+    
+    // 再玩一次
+    playAgainBtn.addEventListener('click', () => {
+      // 隐藏结果区域，显示游戏区域
+      resultSection.classList.add('hidden');
+      gameSection.classList.remove('hidden');
+      
+      // 重新初始化游戏
+      initializeGame();
+      
+      // 开始倒计时
+      startCountdown();
+    });
+    
+    // 商品筛选
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 移除所有按钮的活跃状态
+        filterBtns.forEach(b => {
+          b.className = 'filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-dark/70';
+        });
+        
+        // 添加当前按钮的活跃状态
+        btn.className = 'filter-btn px-3 py-1 rounded-lg text-sm font-medium bg-primary/10 text-primary';
+        
+        // 渲染筛选后的商品
+        renderProducts(btn.dataset.category);
+      });
+    });
+  </script>
+</body>
+</html>
+    

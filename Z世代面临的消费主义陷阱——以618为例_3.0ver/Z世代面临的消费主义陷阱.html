@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数读 | Z世代消费主义陷阱</title>
+    <style>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: rgb(252,253,255);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: rgb(59,130,246);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            color: rgb(74,84,98);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #3498db;
+        }
+    </style>
+
+    <style>
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .carousel-item {
+            display: none;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .carousel-item.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .carousel-item.active {
+            display: block;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            padding: 15px 30px;
+            color: white;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .caption h3 {
+            font-size: 16px;
+            margin: 0 0 8px 0;
+        }
+
+        .caption p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.3);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .prev { left: 20px; }
+        .next { right: 20px; }
+    </style>
+    <style>
+        .content-summary {
+            padding: 40px 0;
+            background: rgb(238, 243, 255);
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 50%;
+            max-width: 50%;
+            background: rgba(245,245,245,0.5);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+
+        /* 内容区样式 */
+.content-area {
+    width: 100%;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(238, 243, 255);
+}
+
+.side-card {
+    width: 20%;
+    background: rgba(245,245,245,0.5);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 0 10px;
+}
+
+.side-card h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.side-card p {
+    font-size: 14px;
+    color: #34495e;
+    line-height: 1.6;
+}
+
+.main-content {
+    width: 60%;
+}
+
+/* 为主要标题添加华文仿宋字体 */
+.block-title {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 24px;
+    margin: 16px auto;
+    justify-content: center;
+    font-family: "华文仿宋", "STFangsong", serif;  /* 添加华文仿宋字体 */
+}
+
+/* 为内容摘要区的h2标题添加华文仿宋字体 */
+.card h2 {
+    font-family: "华文仿宋", "STFangsong", serif;  /* 添加华文仿宋字体 */
+}
+
+/* 为侧边栏的h3标题添加华文仿宋字体 */
+.side-card h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-family: "华文仿宋", "STFangsong", serif;  /* 添加华文仿宋字体 */
+}
+
+/* 为环保消费板块中的h3标题添加华文仿宋字体 */
+.text-content h3 {
+    font-family: "华文仿宋", "STFangsong", serif;  /* 添加华文仿宋字体 */
+}
+
+.block-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+
+.text-content {
+    flex: 1;
+    min-width: 300px;
+    margin: 0 12%;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    font-family: "Microsoft YaHei";  /* 添加字体属性 */
+}
+
+.game-button {
+    display: block;
+    margin: 0 auto;
+    padding: 15px 30px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.game-button:hover {
+    background: #1976D2;
+}
+
+/* 内容区4样式 */
+.content-block {
+    scroll-margin-top: 80px;
+}
+
+.platform-button {
+    display: block;
+    width: 200px;
+    margin: 20px 12%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.platform-button:hover {
+    transform: scale(1.05);
+}
+
+.image-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 30px 12%;
+}
+
+.image-group img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.content-block ul {
+    margin: 20px 12%;
+    padding-left: 20px;
+    list-style-type: square;
+}
+
+.content-block li {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #333;  /* 修改字体颜色 */
+}
+
+/* 页尾样式 */
+footer {
+    background: #808080;
+    padding: 40px 12%;
+    display: flex;
+    gap: 40px;
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-section {
+    margin-bottom: 25px;
+}
+
+footer h3 {
+    color: #f8f9fa;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+footer p {
+    color: #e9ecef;
+    line-height: 1.8;
+    margin: 0 0 10px 0;
+}
+
+@media (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        padding: 30px 5%;
+    }
+}
+
+.text-content img {
+    width: 100%;
+    margin: 20px -12%;
+}
+
+.game-button {
+    display: block;
+    margin: 0 auto;
+    padding: 15px 30px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.game-button:hover {
+    background: #1976D2;
+}
+
+/* 内容区4样式 */
+.platform-button {
+    display: block;
+    width: 200px;
+    margin: 20px 12%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.platform-button:hover {
+    transform: scale(1.05);
+}
+
+.image-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 30px 12%;
+}
+
+.image-group img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.content-block ul {
+    margin: 20px 12%;
+    padding-left: 20px;
+    list-style-type: square;
+}
+
+.content-block li {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+/* 页尾样式 */
+footer {
+    background: #808080;
+    padding: 40px 12%;
+    display: flex;
+    gap: 40px;
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-section {
+    margin-bottom: 25px;
+}
+
+footer h3 {
+    color: #f8f9fa;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+footer p {
+    color: #e9ecef;
+    line-height: 1.8;
+    margin: 0 0 10px 0;
+}
+
+@media (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        padding: 30px 5%;
+    }
+}
+
+.text-content img {
+    width: 80%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.content-summary h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .content-summary p {
+            font-size: 16px;
+            color: #34495e;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .content-summary {
+                padding: 30px 5%;
+            }
+            .card {
+                width: 90%;
+                padding: 20px;
+            }
+            .content-summary h2 {
+                font-size: 20px;
+            }
+            .content-summary p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: rgb(238, 243, 255);">
+    <nav>
+        <a href="#" class="logo"><img src="logo.png" alt="数读logo" style="height: 30px; vertical-align: middle;"> 数读</a>
+        <div class="nav-links">
+            <a href="#consumerism" class="nav-link" onclick="smoothScroll('#consumerism')">消费主义陷阱</a>
+            <a href="#rational" class="nav-link" onclick="smoothScroll('#rational')">理性消费</a>
+            <a href="#game" class="nav-link" onclick="smoothScroll('#game')">互动游戏</a>
+            <a href="#eco" class="nav-link" onclick="smoothScroll('#eco')">环保消费</a>
+            <a href="#about" class="nav-link" onclick="smoothScroll('#about')">关于我们</a>
+        </div>
+    </nav>
+
+    <!-- 轮播图区域 -->
+    <div class="carousel">
+        <div class="carousel-item active">
+            <img src="1.jpg" alt="快递爆仓">
+            <div class="caption">
+                <h3>大学校园快递爆仓</h3>
+                <p>人均网购3件，小树林包裹堆积如山</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="2.jpg" alt="618海报">
+            <div class="caption">
+                <h3>地铁站内的618活动海报</h3>
+                <p>天猫618线上线下成一家，新零售带动线下消费笔数增长45%</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="3.jpg" alt="拼实惠">
+            <div class="caption">
+                <h3>新青年更爱拼实惠</h3>
+                <p>拼多多成为95后年轻人最常用购物软件</p>
+            </div>
+        </div>
+        
+        <!-- 切换按钮 -->
+        <button class="prev">‹</button>
+        <button class="next">›</button>
+    </div>
+    <script>
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.carousel-item');
+        const intervalTime = 5000;
+
+        function showItem(index) {
+            items.forEach(item => item.classList.remove('active'));
+            index = (index + items.length) % items.length;
+            items[index].classList.add('active');
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            showItem(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showItem(currentIndex - 1);
+        }
+
+        // 自动轮播
+        let slideInterval = setInterval(nextSlide, intervalTime);
+
+        // 按钮事件绑定
+        document.querySelector('.prev').addEventListener('click', () => {
+            prevSlide();
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, intervalTime);
+        });
+
+        document.querySelector('.next').addEventListener('click', () => {
+            nextSlide();
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, intervalTime);
+        });
+    </script>
+
+<script>
+function smoothScroll(target) {
+    const element = document.querySelector(target);
+    window.scrollTo({
+        behavior: 'smooth',
+        top: element.offsetTop - 80,
+    });
+}
+</script>
+
+    <!-- 内容摘要区 -->
+    <section class="content-summary">
+        <div class="card">
+            <h2>Z世代的618消费图鉴，理性旗帜下的失控时空</h2>
+            <p>（本报讯）2025年618购物节以<mark>8556亿元</mark>的全网销售额收官，同比增长15.2%的数据亮眼，亮眼的数据背后除了确切的花费，还有许多人使用<mark>借贷、超前消费</mark>的方式参与这场购物狂欢。</p>
+        </div>
+    </section>
+    <!-- 内容区 -->
+    <section class="content-area">
+        <div class="side-card">
+            <h3>消费小贴士</h3>
+            <p>购物前先列清单，避免冲动消费；</p>
+            <p>设置预算上限；
+            <p>优先考虑实用性；</p>
+            <p>延迟满足，非急需物品可暂缓购买。</p>
+        </div>
+        
+        <div class="main-content">
+        <!-- 消费主义陷阱板块 -->
+        <div class="content-block" id="consumerism">
+            <h2 class="block-title">01 消费主义陷阱：你中招了吗？</h2>
+            <div class="block-content">
+                <div class="text-content">
+                    <p>在接受我们调查问卷的人中，<mark>77.27%</mark>的受访者在问卷中勾选"参考测评但理性购买"这个选项，通过我们的深度采访发现，认知上的理性派与实践中的冲动派往往会在同一个人体内激烈交战。</p>
+                    <p>上海大三学生林薇的购物车记录显示：她在小红书种草了某款限量眼影盘，尽管做了三天功课，最终仍在<mark>"最后2小时降价"的倒计时弹窗</mark>弹出时咬牙下单。"128元换来的包装盒，现在还在书架上落灰"，她苦笑着展示未拆封的战利品。</p>
+                    <img src="内容区1_1.png" alt="内容区图片1">
+                    <img src="内容区1_3.png" alt="内容区图片3">
+                    <p>问卷调研中，<mark>68.18%</mark>的受访者将矛头指向"倒计时抢购提醒"，这种制造稀缺感的设计让北京00后陈雨欣囤积了半年用量的面膜。"等发现有效期只剩三个月，只能哭着往脖子上猛敷"。</p>
+                    <p><mark>63.64%</mark>的消费者指出虚构原价折扣与满减阶梯设置的组合拳令人防不胜防。为凑够京东"满300减50"的优惠，张哲硬是添购了根本不需要的手机支架。"那个黑色塑料片在抽屉躺了三个月，最后进了垃圾桶"。</p>
+                    <img src="内容区1_2.png" alt="内容区图片2">
+                    <img src="内容区1_4.png" alt="内容区图片4">
+                    <p>2025年分期消费的暗流尤为危险。调查中所有使用分期服务的Z世代消费者<mark>（占样本13.64%）</mark>坦承购买了超出支付能力的商品。"每个电子产品单独分期都不贵"，京东白条用户王明展示他的还款清单，"但三件商品月供叠加，直接吞掉我半个月生活费"。</p>
+                    <p>这恰与平台数据形成残酷映照：<mark>今年618期间长周期分期（≥12期）订单激增30%，抖音月付、花呗等工具让"轻奢消费"变得触手可及，却也埋下债务隐患。</mark>北京女生李婷的抖音月付账单至今未清，"看到还款金额才惊觉，为三条网红项链背了半年债"。</p>
+                    <img src="内容区1_5.png" alt="内容区图片5">
+                    <p>对于消费主义陷阱，Z世代的态度说是“清醒地沉沦”。<mark>95.45%</mark>的受访者计划未来"按需购买列清单"，<mark>40.91%</mark>尝试设置消费预算上限。</p>
+                    <img src="内容区1_6.png" alt="内容区图片6">
+                    <p>这场消费主义博弈或许永无终结之日。2025年618呈现的<mark>高端化、即时化</mark>特征背后，<mark>AI精准推送和长周期分期</mark>正编织更精密的诱惑网……</p>
+                    <p><em>（注：文中消费者案例及行为数据源自《Z世代618消费行为调查问卷》，市场数据综合艾瑞咨询、星图数据2024-2025年618报告、人名均为化名）</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区2 -->
+        <div class="content-block" id="rational">
+            <h2 class="block-title">02 理性消费：守护你的钱包和未来</h2>
+            <div class="block-content">
+                <div class="text-content">
+                    <p>理性消费能帮助个人避免冲动购物和资源浪费，确保每一笔支出都物有所值，从而优化财务状况、减少不必要的经济压力，同时也有助于降低过度消费对环境和社会的负面影响。</p>
+                    <p>要实现理性消费，建议消费者在购物前明确需求、制定预算，并通过比价和查阅评价选择性价比高的产品；优先考虑耐用、多功能或可持续的商品，避免被营销手段诱导；养成延迟满足的习惯，非急需物品可暂缓购买，以减少冲动消费；此外，定期整理物品清单，避免重复购买，并通过二手交易或共享经济延长资源的使用周期。理性消费不仅是个人理财的关键，也是推动可持续生产和减少资源浪费的重要方式。</p>
+                </div>
+            </div>
+        </div>
+    <!-- 内容区3 -->
+        <div class="content-block" id="game">
+            <h2 class="block-title">03 想要快速了解自己的消费习惯？</h2>
+            <div class="block-content">
+                <button class="game-button" onclick="window.location.href='index.html'">点击开始消费诊断游戏</button>
+            </div>
+        </div>
+
+        <!-- 内容区4 -->
+        <div class="content-block" id="eco">
+            <h2 class="block-title" style="text-align: center;">04 环保消费：为地球减负，从我做起</h2>
+            <div class="block-content">
+                <div class="text-content">
+                    <p>环保消费（绿色消费/可持续消费）是指消费者在购买、使用和处置商品时，优先选择对环境和健康负面影响小、资源利用率高的产品和服务，以减少生态足迹、促进可持续发展的消费模式。</p>
+                    <img src="6.jpg" alt="环保消费" style="width: 70%; margin: 0 auto; display: block;">
+                    
+                    <h3 style="text-align: center;">二手集市平台推荐</h3>
+                    <img src="7.jpg" class="platform-button" alt="二手平台" style="width: 400px;">
+                    <p>三兔二手循环商店是一家专注二手物品流转的品牌，致力于推广循环消费的生活方式。现在除了以市集形式的活动出现，三兔二手循环商店也在营业中。欢迎大家来到店中寄卖、购买、捐赠闲置物品。</p>
+                    <div class="image-group" style="grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <img src="8.jpg" alt="集市1" style="width: 100%;">
+                        <img src="9.jpg" alt="集市2" style="width: 100%;">
+                        <img src="10.jpg" alt="集市3" style="width: 100%;">
+                    </div>
+                    
+                    <h3 style="text-align: center;">环保消费小贴士</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <ul style="text-align: left;">
+                            <li>节约水资源</li>
+                            <li>节约燃气</li>
+                        </ul>
+                        <ul style="text-align: left;">
+                            <li>拒绝“白色垃圾”</li>
+                            <li>珍惜纸张</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <div class="side-card">
+            <h3>环保消费</h3>
+            <p>推荐使用二手平台，延长物品使用寿命；</p>
+            <p>选择可重复使用的包装；</p>
+            <p>支持环保品牌。</p>
+        </div>
+    </section>
+    
+    <!-- 页尾 -->
+    <footer>
+        <div class="footer-left" id="about">
+            <h3>关于我们</h3>
+            <p>我们是中国传媒大学电视学院的大三学生，本报道的大部分数据皆由团队成员收集整理。</p>
+        </div>
+        
+        <div class="footer-right">
+            <div class="footer-section">
+                <h3>加入我们</h3>
+                <p>如果您是二手市集/环保达人/个人媒体想倡导理性消费，可以通过下方联系方式联系我们。</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱地址：2634681834@qq.com</p>
+                <p>联系电话：13481584725</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
